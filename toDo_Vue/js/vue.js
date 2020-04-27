@@ -1,6 +1,7 @@
 const app = new Vue({
     el: '#app',
     data: {
+        toDoList: [],
         login: false,
         btn: 'add new',
         message: null,
@@ -18,7 +19,6 @@ const app = new Vue({
                 Authorization: null
             }
         },
-        toDoList: [],
         divClass: '',
         selected: []
     },
@@ -34,20 +34,16 @@ const app = new Vue({
                 this.editTodo.body = body;
 
                 axios.put(`http://127.0.0.1:8000/api/v1/${this.editTodo.id}/`, this.editTodo, this.conf)
-                    .then(res => {
-                        console.log(res.data)
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    });
+                    .then(res => {this.allTodo();})
+                    .catch(err => {console.log(err);});
             }
             else {
-                // newTodo = {
-                //     title,
-                //     body,
-                // };
-                axios.post(`http://127.0.0.1:8000/api/v1/`, this.formNote, this.conf)
-                    .then(res => {this.toDoList.push(res.data);});
+                newTodo = {
+                    title,
+                    body,
+                };
+                axios.post(`http://127.0.0.1:8000/api/v1/`, newTodo, this.conf)
+                    .then(res => {this.allTodo()});
             }
             this.setNone();
         },
@@ -71,14 +67,20 @@ const app = new Vue({
             axios.delete(`http://127.0.0.1:8000/api/v1/${todo.id}/`, this.conf)
                 .then(res => {
                     if (res.status === 204) {
-                        this.toDoList.splice(index, 1);
+                        this.allTodo()
                     }
                 });
         },
         doneNote(index) {
-            let todo = this.toDoList[index];
-            todo.done = !todo.done;
-            axios.put(`http://127.0.0.1:8000/api/v1/${todo.id}/`, todo, this.conf);
+            let todo = this.toDoList[index]
+            todo.done = !todo.done
+            axios.put(`http://127.0.0.1:8000/api/v1/${todo.id}/`, todo, this.conf)
+                .then(res => {
+                    this.allTodo()
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         },
         loginTodo() {
             axios.post(`http://127.0.0.1:8000/auth/jwt/create/`, this.user)
@@ -86,9 +88,13 @@ const app = new Vue({
                 .then(access => {
                     this.login = !this.login;
                     this.conf.headers.Authorization = `Bearer ${access}`;
-                    axios.get('http://127.0.0.1:8000/api/v1/', this.conf)
-                        .then(res => { this.toDoList = res.data.results; });
+                    this.allTodo()
                 });
+
+        },
+        allTodo() {
+            axios.get('http://127.0.0.1:8000/api/v1/', this.conf)
+                .then(res => {this.toDoList = res.data ? res.data : [];});
 
         }
 

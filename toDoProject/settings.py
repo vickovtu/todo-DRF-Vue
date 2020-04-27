@@ -154,14 +154,14 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.IsAdminUser',
         'rest_framework.permissions.AllowAny',
     ),
-    'PAGE_SIZE': 10,
+    # 'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS':
-        'rest_framework_json_api.pagination.PageNumberPagination',
+    # 'DEFAULT_PAGINATION_CLASS':
+    #     'rest_framework_json_api.pagination.PageNumberPagination',
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 
