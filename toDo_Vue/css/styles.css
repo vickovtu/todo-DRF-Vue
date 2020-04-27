@@ -1,0 +1,8 @@
+.wrapper {
+	padding: 15px;
+	max-width: 500px;
+	margin: 0 auto;
+}
+.done {
+	text-decoration: line-through
+}

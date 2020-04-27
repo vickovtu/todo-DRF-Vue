@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="./css/styles.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="wrapper">
+            <div class="sample">
+                <h1>TODO LIST</h1>
+
+                <form v-if="!login" @submit.prevent="loginTodo">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" class="form-control" v-model="user.username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" class="form-control" v-model="user.password">
+                    </div>
+                    <button class="btn btn-success">LOGIN</button>
+                </form>
+
+
+                <div v-else >
+                    <div class="alert alert-danger" role="alert" v-if="message">
+                        {{message}}
+                    </div>
+
+
+                    <!-- form add edit todo -->
+
+                    <form @submit.prevent="addNote">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" class="form-control" v-model="formNote.title">
+                        </div>
+                        <div class="form-group">
+                            <label>What need to do?</label>
+                            <textarea type="textarea" class="form-control" v-model="formNote.body"></textarea>
+                        </div>
+                        <button class="btn btn-success">{{btn}}</button>
+                        <button type="button" class="btn btn-warning" v-if="editTodo" @click="setNone">reset</button>
+                    </form>
+
+                    <!-- todolist -->
+                    <div class="note mt-5" v-for="(note, index) in toDoList" :key="note.title">
+                        <div class="card">
+                            <h5 class="card-header" :class="{done: note.done}">{{ note.title }}</h5>
+                            <div class="card-body">
+                                <p class="card-text" :class="{done: note.done}">{{note.body}}</p>
+                                <button class="btn btn-danger" @click="deleteNote(index)">delete</button>
+                                <button class="btn btn-warning" @click="editNote(index)">edit</button>
+                                <button class="btn btn-success" @click="doneNote(index)">done</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="./js/vue.js"></script>
+</body>
+
+</html>
